@@ -164,7 +164,7 @@ Founder (你)
 - ✅ 修复 freecad_mass_extractor（2026-05-23）— FreeCAD 1.1.1 实际可用，builder + extractor 均通过真实建模验证
 - ✅ 补充 rocketcea 真实 KNSB 推进剂数据（2026-05-23）— CEA 计算理论 Isp=157.8s @50bar/eps6（非之前 183s 估算），工程实际 126-142s
 - ✅ GitHub 开源（2026-05-23）— https://github.com/maimai-dot/RocketFactory, AGPLv3
-- arXiv 防御性公开
+- arXiv 防御性公开（论文已撰写，待提交）
 
 ## 信仰声明
 
