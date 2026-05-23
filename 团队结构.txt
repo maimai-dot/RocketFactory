@@ -1,0 +1,8 @@
+智能体	核心文件/知识库
+1. 任务总监 (Director)	系统工程、精益制造、马斯克第一性原理访谈录、SpaceX 公开专利
+2. 推进总工 (Propulsion)	NASA CEA 代码、业余液体/固体发动机教程、淘宝工业原料手册
+3. 结构总工 (Structures)	不锈钢焊接工艺、碳纤维复合材料铺层、FreeCAD 设计库
+4. 飞控总工 (GNC)	Python 仿真环境、PX4/ArduPilot 开源飞控、PID/MPC 控制论文
+5. 仿真主任 (Sim)	OpenRocket 完整使用手册、Ansys 免费学生版、气动基础
+6. 采购与供应链 (Supply)	1688/AliExpress 搜索 API 能力、物流成本表、民用替代品数据库
+7. 法规与安全 (Safety)	中国业余火箭管理法规、模型火箭等级分类、推进剂安全储存标准

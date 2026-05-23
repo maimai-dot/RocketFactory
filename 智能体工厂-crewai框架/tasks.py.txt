@@ -1,0 +1,56 @@
+# tasks.py
+"""
+通用任务工厂 - 简洁可靠版本
+"""
+import os
+from crewai import Task
+from datetime import datetime
+
+
+def create_task(task_config, agents, tasks_dict, product_name, product_details, excel_data_path=None):
+    """
+    根据配置创建单个任务
+    """
+    current_date = datetime.now().strftime("%Y年%m月%d日")
+    
+    # 格式化描述
+    description = task_config["description_template"].format(
+        current_date=current_date,
+        product_name=product_name,
+        product_details=product_details
+    )
+    
+    # 添加数据文件信息
+    if excel_data_path and os.path.exists(excel_data_path):
+        description += f"\n\n📊 数据文件路径：{excel_data_path}"
+    
+    # 获取上下文任务（依赖）
+    context = []
+    for ctx_name in task_config.get("context", []):
+        if ctx_name in tasks_dict:
+            context.append(tasks_dict[ctx_name])
+    
+    return Task(
+        description=description,
+        agent=agents[task_config["agent"]],
+        expected_output=task_config["expected_output"],
+        context=context if context else None,
+        output_file=task_config["output_file"].format(product_name=product_name),
+        max_execution_time=task_config.get("max_execution_time", 3600)
+    )
+
+
+def create_all_tasks(task_configs, agents, product_name, product_details, excel_data_path=None):
+    """
+    批量创建所有任务
+    """
+    tasks = []
+    tasks_dict = {}
+    
+    for config in task_configs:
+        task = create_task(config, agents, tasks_dict, product_name, product_details, excel_data_path)
+        tasks.append(task)
+        tasks_dict[config["name"]] = task
+        print(f"✅ 创建任务: {config['name']} -> {config['agent']}")
+    
+    return tasks

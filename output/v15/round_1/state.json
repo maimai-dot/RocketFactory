@@ -1,0 +1,10 @@
+{
+  "task_instruction": "计算150mm直径3mm壁厚1.5m长铝管的质量",
+  "task_params": {},
+  "round_num": 1,
+  "cost_summary": {
+    "total_tokens": 9803,
+    "estimated_cost": 0.028394000000000003,
+    "calls": 1
+  }
+}

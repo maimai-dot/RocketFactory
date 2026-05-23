@@ -1,0 +1,47 @@
+# agents.py
+"""
+通用智能体工厂 - 适配 LangChain LLM 对象
+"""
+from crewai import Agent
+from tools import get_tool
+
+
+def create_agent(agent_config, llm):
+    """
+    根据配置创建智能体
+    :param agent_config: 智能体配置字典
+    :param llm: LangChain ChatOpenAI 对象
+    """
+    # 获取工具列表
+    tools = []
+    for tool_name in agent_config.get("tools", []):
+        tool = get_tool(tool_name)
+        if tool:
+            tools.append(tool)
+    
+    # 创建智能体（直接传入 LangChain LLM 对象，CrewAI 兼容）
+    return Agent(
+        role=agent_config["role"],
+        goal=agent_config["goal"],
+        backstory=agent_config["backstory"],
+        llm=llm,
+        verbose=agent_config.get("verbose", True),
+        allow_delegation=False,
+        tools=tools,
+        max_iter=agent_config.get("max_iter", 10)
+    )
+
+
+def create_all_agents(agent_configs, llm):
+    """
+    批量创建所有智能体
+    :param agent_configs: 智能体配置列表
+    :param llm: LangChain ChatOpenAI 对象
+    :return: 智能体字典 {name: agent}
+    """
+    agents = {}
+    for config in agent_configs:
+        agent = create_agent(config, llm)
+        agents[config["name"]] = agent
+        print(f"✅ 创建智能体: {config['name']} - {config['role']}")
+    return agents

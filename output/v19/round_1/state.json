@@ -1,0 +1,10 @@
+{
+  "task_instruction": "一个日活100万的短链服务，每天生成500万条短链，数据库怎么设计？给出QPS估算和存储方案。",
+  "task_params": {},
+  "round_num": 1,
+  "cost_summary": {
+    "total_tokens": 11883,
+    "estimated_cost": 0.043685999999999996,
+    "calls": 1
+  }
+}

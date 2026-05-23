@@ -1,0 +1,17 @@
+{
+  "instruction": "评估氨氯地平（5mg/日）与赖诺普利（10mg/日）联合用于65 岁、轻度肾功能不全（eGFR 55 mL/min/1.73m²）高血压患者的安全性和有效性。需考虑：药代动力学相互作用、血压目标、电解质紊乱风险、肾功能监测频率。给出具体建议和监测方案。",
+  "framework": "Sigma AERC",
+  "timestamp": "2026-05-21T18:46:23.423324",
+  "total_rounds": 2,
+  "final_verdict": "converged",
+  "parameters": {},
+  "decisions": [],
+  "alarm_flags": [],
+  "consensus": [],
+  "cost_summary": {
+    "total_tokens": 8998,
+    "estimated_cost": 0.032998,
+    "calls": 2
+  },
+  "output_dir": "output\\v18"
+}

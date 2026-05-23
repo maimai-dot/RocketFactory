@@ -1,0 +1,10 @@
+{
+  "task_instruction": "计算一根2米长150mm直径5mm壁厚铝合金管的质量",
+  "task_params": {},
+  "round_num": 1,
+  "cost_summary": {
+    "total_tokens": 10204,
+    "estimated_cost": 0.029920000000000002,
+    "calls": 1
+  }
+}

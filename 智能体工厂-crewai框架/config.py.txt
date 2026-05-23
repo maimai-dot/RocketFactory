@@ -1,0 +1,108 @@
+# config.py
+"""
+配置文件 - 定义智能体团队的角色、目标、任务等
+修改此文件即可创建不同功能的智能体团队
+"""
+
+# ====================== 团队配置 ======================
+TEAM_NAME = "市场研究团队"
+
+# ====================== 智能体定义 ======================
+AGENTS = [
+    {
+        "name": "资深市场研究员",
+        "role": "市场研究员",
+        "goal": "全面收集并分析目标产品的市场数据",
+        "backstory": "你拥有10年市场调研经验，擅长从多维度分析市场数据...",
+        "tools": ["search_tool", "excel_analysis_tool"],
+        "max_iter": 10,
+        "verbose": True
+    },
+    {
+        "name": "产品定位专家",
+        "role": "定位专家",
+        "goal": "基于市场调研结果，明确产品的核心价值和差异化优势",
+        "backstory": "你是知名咨询公司的产品定位专家...",
+        "tools": [],
+        "max_iter": 10,
+        "verbose": True
+    },
+    # ... 添加更多智能体
+]
+
+# ====================== 任务定义 ======================
+TASKS = [
+    {
+        "name": "市场调研",
+        "description_template": """
+        当前日期：{current_date}
+        请针对以下产品进行深入市场调研：
+        产品名称：{product_name}
+        产品详情：{product_details}
+        
+        ⚠️ 重要：当前时间是{current_date}，你的训练数据截止到2024年。
+        **你必须使用 search_tool 搜索工具获取最新（2026年）的实时市场信息！**
+        
+        调研要求：
+        1. 行业分析：分析发展趋势、市场规模、增长潜力（使用搜索获取2026年最新数据）
+        2. 竞品分析：识别至少5家主要竞争对手（搜索最新竞品动态）
+        3. 用户分析：描绘目标用户画像
+        4. 市场机会：识别机会和风险
+        
+        输出要求：结构化的市场调研报告（至少1500字），引用信息来源
+        """,
+        "agent": "资深市场研究员",
+        "expected_output": "详细的市场调研报告",
+        "output_file": "{product_name}_市场调研报告.md",
+        "context": []
+    },
+    {
+        "name": "产品定位",
+        "description_template": """
+        基于市场调研结果，完成【{product_name}】的产品定位：
+        
+        定位要求：
+        1. 核心价值主张
+        2. 目标用户群体
+        3. 差异化优势
+        4. 市场定位
+        
+        输出要求：产品定位分析报告（至少1000字）
+        """,
+        "agent": "产品定位专家",
+        "expected_output": "产品定位分析报告",
+        "output_file": "{product_name}_产品定位报告.md",
+        "context": ["市场调研"]
+    },
+    # ... 添加更多任务
+]
+
+# ====================== 工具配置 ======================
+TOOLS = {
+    "search_tool": {
+        "type": "duckduckgo",
+        "description": "免费搜索工具，无需API密钥"
+    },
+    "serpapi_tool": {
+        "type": "serpapi",
+        "api_key_env": "SERPAPI_API_KEY"
+    },
+    "excel_analysis_tool": {
+        "type": "custom",
+        "function": "excel_analysis_tool"
+    },
+    "data_visualization_tool": {
+        "type": "custom",
+        "function": "data_visualization_tool"
+    }
+}
+
+# ====================== 报告配置 ======================
+REPORT_CONFIG = {
+    "title_template": "{product_name}市场研究报告",
+    "author": "AI智能研究团队",
+    "output_dir": "D:\\市场分析报告",
+    "css_style": "professional",
+    "include_toc": True,
+    "include_cover": True
+}

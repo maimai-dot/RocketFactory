@@ -1,0 +1,24 @@
+# 火箭工厂 —— Python 依赖
+# 安装方式：pip install -r requirements.txt
+
+# 智能体框架（当前阶段）
+crewai>=0.11.0
+
+# 架构演进目标
+langgraph>=0.2.0
+langgraph-checkpoint-sqlite>=2.0.0
+
+# 数据处理与可视化
+numpy>=1.26.0
+pandas>=2.1.0
+matplotlib>=3.8.0
+scipy>=1.11.0
+
+# MCP 协议（FreeCAD 连接）
+mcp>=1.0.0
+
+# 推进剂分析（NASA CEA Python 封装）
+rocketcea>=1.2.0
+
+# 环境管理
+python-dotenv>=1.0.0

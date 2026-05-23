@@ -1,0 +1,17 @@
+{
+  "instruction": "KNSB固体推进剂在50bar的比冲(用rocketcea),以及一个150mm直径1.5m长铝管的质量(用FreeCAD)。简短汇报。",
+  "timestamp": "2026-05-18T14:17:52.605153",
+  "sections": [
+    "_preamble",
+    "📋 综合汇报：KNSB 比冲 + 铝管质量",
+    "一、KNSB 固体推进剂 @ 50 bar — RocketCEA 分析",
+    "二、150mm × 1.5m 铝管 — 质量计算",
+    "三、综合速览表",
+    "四、下一步建议"
+  ],
+  "summary": "--- **致 Founder | Director 汇总 | 两线并行已完成** --- > 执行者：**Propulsion Chief** | 工具：RocketCEA（N₂O/Ethanol 代理模型） RocketCEA 代理模型给出的是**热力学理论上限**。实际 KNSB 涉及 KNO₃ 分解吸热、KOH/K₂CO₃ 凝聚相两相流滞后、非理想燃烧效率，**实测 Isp 通常只有理论的 75–85%**（即 120–160 s）。民用级原料（农用 KNO₃ / 食品级山梨醇）手工浇注装药时，**强烈建议按 140–155 s 设计**。 --- > 执行者：**Structures Chief** | 方法：解析法（交叉验证） - 线密度（2mm壁厚）：≈ **2.51 kg/m** - 以上为纯管段理论质量，不含法兰、焊缝、接头等附件 --- --- 1. **推进系统**：基于 140–155 s Isp 和所需总冲反推推进剂装药量，确定药柱几何（内孔燃面设计）。 2. **结构系统**：结合铝管质量 + 推进剂质量 + 载荷，评估整箭干/湿重预算，确定壁厚取舍（2mm",
+  "key_findings": [],
+  "recommendations": [],
+  "total_length": 2134,
+  "report_file": "REPORT.md"
+}

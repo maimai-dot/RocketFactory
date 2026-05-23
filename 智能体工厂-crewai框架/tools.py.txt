@@ -1,0 +1,113 @@
+# tools.py
+"""
+通用工具工厂 - 注册和管理所有工具
+"""
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from crewai.tools import tool
+from crewai_tools import SerpApiGoogleSearchTool
+import os
+
+# ========== 新增：导入 DuckDuckGo 搜索 ==========
+from langchain_community.tools import DuckDuckGoSearchResults
+from crewai.tools import tool as crewai_tool
+
+# 工具注册表
+_TOOL_REGISTRY = {}
+
+
+def register_tool(name, tool_instance):
+    """注册工具"""
+    _TOOL_REGISTRY[name] = tool_instance
+
+
+def get_tool(name):
+    """获取工具"""
+    return _TOOL_REGISTRY.get(name)
+
+
+# ====================== 内置工具定义 ======================
+
+def init_tools():
+    """初始化所有工具"""
+    
+    # ========== 1. DuckDuckGo 免费搜索工具（新增，优先）==========
+    try:
+        # 创建 DuckDuckGo 搜索实例
+        ddg_search = DuckDuckGoSearchResults(
+            max_results=5,
+            output_format='list'
+        )
+        
+        # 包装成 CrewAI 工具
+        @crewai_tool
+        def duckduckgo_search(query: str) -> str:
+            """使用 DuckDuckGo 搜索实时信息。当你需要查找最新新闻、数据、市场信息时使用此工具。"""
+            try:
+                result = ddg_search.invoke(query)
+                return result
+            except Exception as e:
+                return f"搜索失败: {str(e)}"
+        
+        # 注册工具（提供两个名称方便使用）
+        register_tool("duckduckgo_search", duckduckgo_search)
+        register_tool("search_tool", duckduckgo_search)  # 通用别名
+        print("✅ DuckDuckGo 免费搜索工具已配置")
+    except Exception as e:
+        print(f"⚠️ DuckDuckGo 工具初始化失败: {e}")
+    
+    # ========== 2. SerpAPI 搜索工具（备选，如果配置了密钥）==========
+    serpapi_key = os.getenv("SERPAPI_API_KEY")
+    if serpapi_key and serpapi_key.strip():
+        try:
+            serpapi_tool = SerpApiGoogleSearchTool(api_key=serpapi_key)
+            register_tool("serpapi_tool", serpapi_tool)
+            print("✅ SerpAPI 工具已配置")
+        except Exception as e:
+            print(f"⚠️ SerpAPI 配置失败: {e}")
+    else:
+        print("ℹ️ SerpAPI密钥未配置，将使用 DuckDuckGo 免费搜索")
+    
+    # ========== 3. Excel 分析工具 ==========
+    @tool
+    def excel_analysis_tool(file_path: str, analysis_query: str) -> str:
+        """读取Excel文件并执行数据分析"""
+        try:
+            df = pd.read_excel(file_path)
+            result = eval(f"df.{analysis_query}")
+            if isinstance(result, pd.DataFrame) or isinstance(result, pd.Series):
+                return result.to_string()
+            return str(result)
+        except Exception as e:
+            return f"分析失败：{str(e)}"
+    
+    register_tool("excel_analysis_tool", excel_analysis_tool)
+    
+    # ========== 4. 数据可视化工具 ==========
+    @tool
+    def data_visualization_tool(file_path: str, x_column: str, y_column: str, 
+                                 chart_type: str = "line", save_path: str = "chart.png") -> str:
+        """生成数据可视化图表"""
+        try:
+            plt.rcParams["font.sans-serif"] = ["SimHei"]
+            plt.rcParams["axes.unicode_minus"] = False
+            df = pd.read_excel(file_path)
+            plt.figure(figsize=(12, 6))
+            
+            if chart_type == "line":
+                sns.lineplot(data=df, x=x_column, y=y_column, marker='o')
+            elif chart_type == "bar":
+                sns.barplot(data=df, x=x_column, y=y_column)
+            elif chart_type == "scatter":
+                sns.scatterplot(data=df, x=x_column, y=y_column)
+            
+            plt.title(f"{x_column} vs {y_column} 分析图")
+            plt.tight_layout()
+            plt.savefig(save_path, dpi=300)
+            plt.close()
+            return f"✅ 图表已保存至：{save_path}"
+        except Exception as e:
+            return f"可视化失败：{str(e)}"
+    
+    register_tool("data_visualization_tool", data_visualization_tool)

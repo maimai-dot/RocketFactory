@@ -1,0 +1,17 @@
+{
+  "instruction": "设计一个日活 500 万用户的短链服务（类似 bit.ly）的数据库架构。要求：1）日生成短链 ~2000 万条；2）日访问量 ~5 亿次重定向；3）短链有效期 3 年；4）需要统计每条的点击量。请给出：存储引擎选择、分库分表策略、缓存方案、预估存储量、QPS、P99 延迟、月度基础设施成本。用具体数值，不能只说'高性能''低成本'。",
+  "framework": "Sigma AERC",
+  "timestamp": "2026-05-21T18:45:13.333725",
+  "total_rounds": 2,
+  "final_verdict": "converged",
+  "parameters": {},
+  "decisions": [],
+  "alarm_flags": [],
+  "consensus": [],
+  "cost_summary": {
+    "total_tokens": 9080,
+    "estimated_cost": 0.03308,
+    "calls": 2
+  },
+  "output_dir": "output\\v17"
+}

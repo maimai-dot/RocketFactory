@@ -1,0 +1,5 @@
+{
+  "instruction": "KNSB固体推进剂在50bar的比冲(用rocketcea),以及一个150mm直径1.5m长铝管的质量(用FreeCAD)。简短汇报。",
+  "timestamp": "2026-05-18T16:31:17.006235",
+  "error": "'dict' object has no attribute 'history'"
+}

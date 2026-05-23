@@ -1,0 +1,36 @@
+# crew_runner.py
+"""
+通用 Crew 执行器（已添加 memory=False）
+"""
+from crewai import Crew, Process
+
+
+class CrewRunner:
+    """智能体团队执行器"""
+    
+    def __init__(self, agents, tasks, verbose=True):
+        self.agents = agents
+        self.tasks = tasks
+        self.verbose = verbose
+    
+    def run(self):
+        """执行任务"""
+        print(f"\n🚀 开始执行任务...")
+        print("=" * 60)
+        
+        crew = Crew(
+            agents=list(self.agents.values()),
+            tasks=self.tasks,
+            process=Process.sequential,
+            verbose=self.verbose,
+            max_rpm=20,
+            memory=False   # ✅ 关键：DeepSeek 环境下关闭记忆功能
+        )
+        
+        try:
+            result = crew.kickoff()
+            print("\n✅ 任务执行完成！")
+            return result
+        except Exception as e:
+            print(f"\n❌ 任务执行失败：{e}")
+            raise

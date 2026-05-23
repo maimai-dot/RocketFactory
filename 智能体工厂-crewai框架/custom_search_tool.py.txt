@@ -1,0 +1,31 @@
+# custom_search_tool.py
+"""
+自定义免费搜索工具 - 使用 DuckDuckGo（无需API密钥）
+"""
+from crewai.tools import BaseTool
+from langchain_community.tools import DuckDuckGoSearchResults
+
+
+class DuckDuckGoSearchTool(BaseTool):
+    """DuckDuckGo 免费搜索工具"""
+    
+    name: str = "DuckDuckGo 搜索"
+    description: str = """
+    使用 DuckDuckGo 搜索引擎进行网络搜索，获取最新信息。
+    当你需要了解实时新闻、当前事件、最新数据时使用此工具。
+    输入一个搜索查询，返回相关的搜索结果。
+    """
+    
+    def _run(self, query: str) -> str:
+        """执行搜索"""
+        try:
+            # 创建 DuckDuckGo 搜索实例
+            search = DuckDuckGoSearchResults(
+                max_results=5,  # 返回5条结果
+                output_format='list'
+            )
+            # 执行搜索
+            result = search.invoke(query)
+            return result
+        except Exception as e:
+            return f"搜索失败: {str(e)}"

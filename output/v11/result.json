@@ -1,0 +1,24 @@
+{
+  "instruction": "KNSB固体推进剂在50bar的比冲(用rocketcea),以及一个150mm直径1.5m长铝管的质量(用FreeCAD)。简短汇报。",
+  "framework": "Sigma PDCA",
+  "timestamp": "2026-05-18T19:27:41.470887",
+  "total_rounds": 3,
+  "final_verdict": "converged",
+  "parameters": {
+    "rocketcea_analyzer_Isp_vac_s": 259.9,
+    "rocketcea_analyzer_Isp_sl_s": 259.9,
+    "rocketcea_analyzer_T_comb_K": 4723.0,
+    "rocketcea_analyzer_C_star_ms": 4962.5,
+    "rocketcea_analyzer_Cf_eq": 1.568,
+    "rocketcea_analyzer_Molar_mass_gmol": 22.49,
+    "rocketcea_analyzer_Gamma": 1.202
+  },
+  "decisions": [],
+  "alarm_flags": [],
+  "cost_summary": {
+    "total_tokens": 164149,
+    "estimated_cost": 0.49969300000000005,
+    "calls": 3
+  },
+  "output_dir": "D:\\RocketFactory\\output\\v11"
+}

@@ -1,0 +1,111 @@
+# main.py
+"""
+入口文件 - 提供 GUI 界面（已适配 DeepSeek）
+"""
+import os
+import tkinter as tk
+from tkinter import filedialog, messagebox, scrolledtext
+from dotenv import load_dotenv
+from langchain_openai import ChatOpenAI
+
+# 加载配置
+from config import AGENTS, TASKS, REPORT_CONFIG
+from tools import init_tools
+from agents import create_all_agents
+from tasks import create_all_tasks
+from crew_runner import CrewRunner
+from report_generator import generate_pdf_report  # 确保你有这个文件
+
+
+def run_analysis(product_name, product_details, excel_data_path=None):
+    """执行分析"""
+    # 初始化工具
+    init_tools()
+    
+    # ✅ 适配 DeepSeek 的 LangChain LLM 配置
+    # 注意：DeepSeek 的 base_url 需要以 /v1 结尾，且 api_key 使用 DEEPSEEK_API_KEY
+    llm = ChatOpenAI(
+        model=os.getenv("OPENAI_MODEL_NAME", "deepseek-chat"),
+        openai_api_base=os.getenv("OPENAI_API_BASE", "https://api.deepseek.com/v1"),
+        openai_api_key=os.getenv("DEEPSEEK_API_KEY") or os.getenv("OPENAI_API_KEY"),
+        temperature=0.7,
+        max_tokens=8000,
+        timeout=int(os.getenv("OPENAI_TIMEOUT", 180)),
+        max_retries=int(os.getenv("OPENAI_MAX_RETRIES", 5))
+    )
+    
+    print(f"✅ 使用模型: {llm.model_name} (Base URL: {llm.openai_api_base})")
+    
+    # 创建智能体和任务
+    agents = create_all_agents(AGENTS, llm)
+    tasks = create_all_tasks(TASKS, agents, product_name, product_details, excel_data_path)
+    
+    # 执行
+    runner = CrewRunner(agents, tasks)
+    result = runner.run()
+    
+    # 生成 PDF 报告
+    final_report_path = f"{product_name}_完整市场研究报告.md"
+    if os.path.exists(final_report_path):
+        pdf_path = generate_pdf_report(
+            product_name,
+            final_report_path,
+            REPORT_CONFIG.get("output_dir", "D:\\市场分析报告")
+        )
+        return pdf_path
+    
+    return None
+
+
+def run_gui():
+    """GUI 界面"""
+    root = tk.Tk()
+    root.title("智能体团队助手")
+    root.geometry("700x600")
+    
+    tk.Label(root, text="项目名称：", font=("SimHei", 12)).pack(pady=5)
+    product_name_entry = tk.Entry(root, width=50)
+    product_name_entry.pack(pady=5)
+    
+    tk.Label(root, text="项目详情：", font=("SimHei", 12)).pack(pady=5)
+    details_text = scrolledtext.ScrolledText(root, height=10, width=80)
+    details_text.pack(pady=5)
+    
+    data_path_var = tk.StringVar()
+    def select_file():
+        file_path = filedialog.askopenfilename(filetypes=[("Excel files", "*.xlsx")])
+        if file_path:
+            data_path_var.set(file_path)
+    
+    tk.Label(root, text="数据文件（可选）：", font=("SimHei", 12)).pack(pady=5)
+    tk.Entry(root, textvariable=data_path_var, width=50).pack(pady=5)
+    tk.Button(root, text="选择文件", command=select_file).pack(pady=5)
+    
+    def on_run():
+        name = product_name_entry.get().strip()
+        details = details_text.get("1.0", tk.END).strip()
+        data_path = data_path_var.get().strip() if data_path_var.get() else None
+        
+        if not name or not details:
+            messagebox.showerror("错误", "请填写项目名称和详情！")
+            return
+        
+        root.destroy()
+        
+        print(f"开始为「{name}」进行分析...")
+        try:
+            pdf_path = run_analysis(name, details, data_path)
+            if pdf_path:
+                messagebox.showinfo("完成", f"报告已生成：{pdf_path}")
+        except Exception as e:
+            messagebox.showerror("错误", f"分析失败：{e}")
+            import traceback
+            traceback.print_exc()
+    
+    tk.Button(root, text="开始分析", command=on_run, bg="#3498db", fg="white", font=("SimHei", 12)).pack(pady=20)
+    root.mainloop()
+
+
+if __name__ == "__main__":
+    load_dotenv()
+    run_gui()
